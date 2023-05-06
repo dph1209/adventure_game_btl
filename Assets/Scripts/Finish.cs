@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class Finish : MonoBehaviour
 {
     private AudioSource finishSound;
-    private bool levelComplete = false;
+    private GameObject _gameObject = null;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -15,16 +17,38 @@ public class Finish : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(collision.gameObject.name == "Player" && !levelComplete)
+		if(collision.gameObject.name == "Player" && _gameObject == null)
         {
             finishSound.Play();
-            levelComplete = true;
+            _gameObject = collision.gameObject;
+            Invoke("SetToStatic", 1f);
             Invoke("CompleteLevel", 2f);
         }
 	}
 
+    private void SetToStatic()
+    {
+        if (_gameObject != null)
+        {
+            _gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            _gameObject.GetComponent<PlayerMovement>().keepIdle = true;
+        }
+    }
+
     private void CompleteLevel()
     {
+        // Gán s? ?i?m ?ã ki?m ???c vào s? ?i?m t?ng
+        PlayerPrefs.SetInt(GameConstant.stageScore, PlayerPrefs.GetInt(GameConstant.currentScore));
+
+        // Ki?m tra n?u ch?i h?t màn cu?i và ?i?m t?ng l?n h?n ?i?m cao nh?t thì gán cho ?i?m cao nh?t
+        if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 2 
+            && PlayerPrefs.GetInt(GameConstant.stageScore) > PlayerPrefs.GetInt(GameConstant.highScore))
+        {
+            PlayerPrefs.SetInt(GameConstant.highScore, PlayerPrefs.GetInt(GameConstant.stageScore));
+        }
+
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

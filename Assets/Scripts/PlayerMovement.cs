@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     private float dirX = 0f;
     [SerializeField] private float moveSpeed = 7f;
 	[SerializeField] private float jumpForce = 14f;
+
+    public bool keepIdle = false;
     private enum movementState { idle, running, jumping, falling }
 
     [SerializeField] private AudioSource jumpSoundEffect;
@@ -24,11 +26,18 @@ public class PlayerMovement : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
-	}
+    }
 
     // Update is called once per frame
     private void Update()
     {
+        if (keepIdle == true)
+        {
+            movementState state = movementState.idle;
+            animator.SetInteger("state", (int)state);
+            return;
+        }
+
         dirX = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
 
