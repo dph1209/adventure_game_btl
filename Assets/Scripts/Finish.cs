@@ -40,11 +40,10 @@ public class Finish : MonoBehaviour
         // Gán s? ?i?m ?ã ki?m ???c vào s? ?i?m t?ng
         PlayerPrefs.SetInt(GameConstant.stageScore, PlayerPrefs.GetInt(GameConstant.currentScore));
 
-        // Ki?m tra n?u ch?i h?t màn cu?i và ?i?m t?ng l?n h?n ?i?m cao nh?t thì gán cho ?i?m cao nh?t
         if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 2 
-            && PlayerPrefs.GetInt(GameConstant.stageScore) > PlayerPrefs.GetInt(GameConstant.highScore))
+            && PlayerPrefs.GetInt(GameConstant.currentScore) > PlayerPrefs.GetInt(GameConstant.highScore))
         {
-            PlayerPrefs.SetInt(GameConstant.highScore, PlayerPrefs.GetInt(GameConstant.stageScore));
+            PlayerPrefs.SetInt(GameConstant.highScore, PlayerPrefs.GetInt(GameConstant.currentScore));
         }
 
         PlayerPrefs.Save();

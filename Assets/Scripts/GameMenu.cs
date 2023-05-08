@@ -10,17 +10,23 @@ public class GameMenu : MonoBehaviour
 {
     [SerializeField] private Text highScoreText;
     [SerializeField] private Text soundText;
-    
+
     public GameObject pauseMenu;
     public static bool IsPause;
     public static bool IsMuted = false;
 
 
-    // Start is called before the first frame update
     void Start()
     {
-        pauseMenu.SetActive(false);
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+
+        if (highScoreText != null)
+        {
+            highScoreText.text = "HIGH SCORE: " + PlayerPrefs.GetInt(GameConstant.highScore);
+        }
         soundText.text = IsMuted ? "Sound: Off" : "Sound: On";
+
     }
 
     void OnEnable()
@@ -28,7 +34,6 @@ public class GameMenu : MonoBehaviour
         soundText.text = IsMuted ? "Sound: Off" : "Sound: On";
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (SceneManager.GetActiveScene().name.Equals("Start Screen")
@@ -37,7 +42,7 @@ public class GameMenu : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null)
         {
             if (IsPause)
             {
@@ -54,11 +59,11 @@ public class GameMenu : MonoBehaviour
     {
         // Khi b?t ??u game, s? m?ng = 3, s? ?i?m = 0
         PlayerPrefs.SetInt(GameConstant.livesRest, GameConstant.defaultLives);
-        PlayerPrefs.Save();
         PlayerPrefs.SetInt(GameConstant.currentScore, 0);
-        PlayerPrefs.Save();
         PlayerPrefs.SetInt(GameConstant.stageScore, 0);
+        PlayerPrefs.SetInt(GameConstant.playerState, 1);
         PlayerPrefs.Save();
+        
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     

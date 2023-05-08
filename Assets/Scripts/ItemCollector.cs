@@ -50,9 +50,12 @@ public class ItemCollector : MonoBehaviour
             Destroy(collision.gameObject);
 
             // ?n táo t?ng m?ng lên 1
-            PlayerPrefs.SetInt(GameConstant.livesRest, PlayerPrefs.GetInt(GameConstant.livesRest) + 1);
-            PlayerPrefs.Save();
-            livesText.text = "Lives: " + PlayerPrefs.GetInt(GameConstant.livesRest);
+            if (PlayerPrefs.GetInt(GameConstant.livesRest) < 5)
+            {
+                PlayerPrefs.SetInt(GameConstant.livesRest, PlayerPrefs.GetInt(GameConstant.livesRest) + 1);
+                PlayerPrefs.Save();
+                livesText.text = "Lives: " + PlayerPrefs.GetInt(GameConstant.livesRest);
+            }
         }
     }
 }

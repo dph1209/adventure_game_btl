@@ -22,6 +22,9 @@ namespace Assets.Scripts
 
         // Tổng điểm sau các vòng
         public const string stageScore = "stage_score";
+
+        // Tình trạng sống/chết
+        public const string playerState = "player_state";
     }
 
     // Gọi highscore bằng cách viết PlayerPref.GetInt(GameConstant.highScore)
